@@ -5,6 +5,7 @@ protocol = input().strip().upper()
 
 
 def packet_callback(packet):
+
     if IP in packet:
         src = packet[IP].src
         dst = packet[IP].dst
@@ -23,4 +24,7 @@ def packet_callback(packet):
             print(f"UDP |  {src}:{packet[UDP].sport} -> {dst}:{packet[UDP].dport}")
 
 
-sniff(count=20, prn=packet_callback)
+try:
+    sniff(prn=packet_callback, store=False)
+except KeyboardInterrupt:
+    print("\nStopped Capturing.")
