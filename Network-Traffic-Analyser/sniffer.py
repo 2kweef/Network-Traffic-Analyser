@@ -1,4 +1,6 @@
 from scapy.all import sniff, IP, TCP, UDP
+import sqlite3
+import datetime
 
 print("Enter protocol to sniff (TCP/UDP or ALL): ")
 protocol = input().strip().upper()
