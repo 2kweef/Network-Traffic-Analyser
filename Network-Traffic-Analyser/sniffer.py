@@ -24,9 +24,10 @@ def packet_callback(packet):
 
         elif protocol == "UDP" and UDP in packet:
             print(f"UDP |  {src}:{packet[UDP].sport} -> {dst}:{packet[UDP].dport}")
-
+sudo pip3 install scapy
 
 try:
-    sniff(prn=packet_callback, store=False)
+    sniff(prn=packet_callback, store=False, timeout=30)
 except KeyboardInterrupt:
+    pass
     print("\nStopped Capturing.")
