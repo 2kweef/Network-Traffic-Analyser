@@ -21,6 +21,30 @@ def init_db(db_path = "traffic.db"):
 print("Enter protocol to sniff (TCP/UDP or ALL): ")
 protocol = input().strip().upper()
 
+def extract_packet_info(packet):
+    if IP not in packet:
+        return None
+
+    src = packet[IP].src
+    dst = packet[IP].dst
+
+    if TCP in packet:
+        return {
+            "protocol": "TCP",
+            "src": src,
+            "src_port": packet[TCP].sport,
+            "dst": dst,
+            "dst_port": packet[TCP].dport
+        }
+    elif UDP in packet:
+        return {
+            "protocol": "UDP",
+            "src": src,
+            "src_port": packet[UDP].sport,
+            "dst": dst,
+            "dst_port": packet[UDP].dport
+        }
+    return None
 
 def packet_callback(packet):
 
