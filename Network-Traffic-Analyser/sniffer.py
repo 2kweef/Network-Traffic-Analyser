@@ -65,9 +65,10 @@ def packet_callback(packet):
         elif protocol == "UDP" and UDP in packet:
             print(f"UDP |  {src}:{packet[UDP].sport} -> {dst}:{packet[UDP].dport}")
 
+conn = init_db()
+
 try:
     sniff(prn=packet_callback, store=False, timeout=30)
-    conn = init_db()
 except KeyboardInterrupt:
     pass
     print("\nStopped Capturing.")
