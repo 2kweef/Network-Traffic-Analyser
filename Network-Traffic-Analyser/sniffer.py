@@ -2,6 +2,22 @@ from scapy.all import sniff, IP, TCP, UDP
 import sqlite3
 import datetime
 
+def init_db(db_path = "traffic.db"):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS packets (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        timestamp TEXT,
+        protocol TEXT,
+        src_ip TEXT,
+        src_port INTEGER,
+        dst_ip TEXT,
+        dst_port INTEGER)
+        """)
+    conn.commit()
+    return conn
+
 print("Enter protocol to sniff (TCP/UDP or ALL): ")
 protocol = input().strip().upper()
 
