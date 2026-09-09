@@ -71,4 +71,5 @@ try:
     sniff(prn=packet_callback, store=False, timeout=30)
 except KeyboardInterrupt:
     pass
-    print("\nStopped Capturing.")
+
+print("\nStopped Capturing.")
