@@ -46,6 +46,9 @@ def extract_packet_info(packet):
         }
     return None
 
+def display_packet(info):
+    print(f"{info['protocol']} | {info['src']}:{info['src_port']} -> {info['dst']}:{info['dst_port']}")
+
 def packet_callback(packet):
 
     if IP in packet:
