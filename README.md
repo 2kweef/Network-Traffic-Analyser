@@ -39,7 +39,3 @@ This project is under active development. Progress so far:
 ## Roadmap
 
 See the phase checklist above. Longer-term, the goal is a working tool with a simple web interface for reviewing captured traffic and anything it flags — built up gradually as I learn more.
-
-## Author
-
-Toufeek Siddique — BSc Cybersecurity and Forensics, University of Westminster
