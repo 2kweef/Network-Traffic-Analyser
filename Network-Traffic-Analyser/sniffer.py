@@ -2,7 +2,8 @@ from scapy.all import sniff, IP, TCP, UDP
 import sqlite3
 import datetime
 
-def init_db(db_path = "traffic.db"):
+
+def init_db(db_path="traffic.db"):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute("""
@@ -18,8 +19,10 @@ def init_db(db_path = "traffic.db"):
     conn.commit()
     return conn
 
+
 print("Enter protocol to sniff (TCP/UDP or ALL): ")
 protocol = input().strip().upper()
+
 
 def extract_packet_info(packet):
     if IP not in packet:
@@ -34,7 +37,7 @@ def extract_packet_info(packet):
             "src": src,
             "src_port": packet[TCP].sport,
             "dst": dst,
-            "dst_port": packet[TCP].dport
+            "dst_port": packet[TCP].dport,
         }
     elif UDP in packet:
         return {
@@ -42,12 +45,16 @@ def extract_packet_info(packet):
             "src": src,
             "src_port": packet[UDP].sport,
             "dst": dst,
-            "dst_port": packet[UDP].dport
+            "dst_port": packet[UDP].dport,
         }
     return None
 
+
 def display_packet(info):
-    print(f"{info['protocol']} | {info['src']}:{info['src_port']} -> {info['dst']}:{info['dst_port']}")
+    print(
+        f"{info['protocol']} | {info['src']}:{info['src_port']} -> {info['dst']}:{info['dst_port']}"
+    )
+
 
 def packet_callback(packet):
 
@@ -68,7 +75,13 @@ def packet_callback(packet):
         elif protocol == "UDP" and UDP in packet:
             print(f"UDP |  {src}:{packet[UDP].sport} -> {dst}:{packet[UDP].dport}")
 
+
 conn = init_db()
+
+
+def save_packet(info):
+    cursor = conn.cursor()
+
 
 try:
     sniff(prn=packet_callback, store=False, timeout=30)
