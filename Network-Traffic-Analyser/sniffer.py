@@ -56,29 +56,6 @@ def display_packet(info):
     )
 
 
-def packet_callback(packet):
-
-    if IP in packet:
-        src = packet[IP].src
-        dst = packet[IP].dst
-        proto = packet[IP].proto
-
-        if protocol == "ALL":
-            if TCP in packet:
-                print(f"TCP |  {src}:{packet[TCP].sport} -> {dst}:{packet[TCP].dport}")
-            elif UDP in packet:
-                print(f"UDP |  {src}:{packet[UDP].sport} -> {dst}:{packet[UDP].dport}")
-
-        elif protocol == "TCP" and TCP in packet:
-            print(f"TCP |  {src}:{packet[TCP].sport} -> {dst}:{packet[TCP].dport}")
-
-        elif protocol == "UDP" and UDP in packet:
-            print(f"UDP |  {src}:{packet[UDP].sport} -> {dst}:{packet[UDP].dport}")
-
-
-conn = init_db()
-
-
 def save_packet(info, conn):
     cursor = conn.cursor()
     cursor.execute(
@@ -93,6 +70,23 @@ def save_packet(info, conn):
         ),
     )
     conn.commit()
+
+
+def packet_callback(packet):
+    info = extract_packet_info(packet)
+    if info is not None:
+        save_packet(info, conn)
+
+        if info["protocol"] == "TCP":
+            if protocol == "TCP" or protocol == "ALL":
+                display_packet(info)
+
+        if info["protocol"] == "UDP":
+            if protocol == "UDP" or protocol == "ALL":
+                display_packet(info)
+
+
+conn = init_db()
 
 
 try:
