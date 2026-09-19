@@ -79,8 +79,20 @@ def packet_callback(packet):
 conn = init_db()
 
 
-def save_packet(info):
+def save_packet(info, conn):
     cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO packets (timestamp, protocol, src_ip, src_port, dst_ip, dst_port) VALUES (?, ?, ?, ?, ?, ?)",
+        (
+            datetime.datetime.now(),
+            info["protocol"],
+            info["src"],
+            info["src_port"],
+            info["dst"],
+            info["dst_port"],
+        ),
+    )
+    conn.commit()
 
 
 try:
