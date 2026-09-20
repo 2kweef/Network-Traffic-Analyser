@@ -115,3 +115,4 @@ except KeyboardInterrupt:
 print("\nStopped Capturing.")
 
 view_packets(conn)
+frequent_packets(conn)
