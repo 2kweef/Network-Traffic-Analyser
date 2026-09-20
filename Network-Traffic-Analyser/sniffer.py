@@ -72,6 +72,14 @@ def save_packet(info, conn):
     conn.commit()
 
 
+def view_packets(conn):
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM packets")
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
+
+
 def packet_callback(packet):
     info = extract_packet_info(packet)
     if info is not None:
@@ -95,3 +103,5 @@ except KeyboardInterrupt:
     pass
 
 print("\nStopped Capturing.")
+
+view_packets(conn)
