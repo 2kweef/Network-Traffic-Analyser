@@ -80,6 +80,16 @@ def view_packets(conn):
         print(row)
 
 
+def frequent_packets(conn):
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT src_ip, COUNT(*) FROM packets GROUP BY src_ip ORDER BY COUNT(*) DESC LIMIT 5
+    """)
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
+
+
 def packet_callback(packet):
     info = extract_packet_info(packet)
     if info is not None:
