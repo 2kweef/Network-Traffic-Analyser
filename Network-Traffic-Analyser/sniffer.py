@@ -98,6 +98,28 @@ def filter_by_ip(conn, ip):
         print(row)
 
 
+def packets_summary(conn, ip):
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        SELECT COUNT(*), MIN(timestamp) AS first_packet, MAX(timestamp) AS last_packet 
+        FROM packets
+        WHERE src_ip = ? OR dst_ip = ? 
+    """,
+        (ip, ip),
+    )
+    row = cursor.fetchone()
+    cursor.execute(
+        """
+    SELECT DISTINCT protocol from packets WHERE src_ip = ? OR dst_ip = ?
+    """,
+        (ip, ip),
+    )
+    protocols = cursor.fetchall()
+    print("Total packets:", row[0], "First packet:", row[1], "Last packet:", row[2])
+    print("Protocols:", [p[0] for p in protocols])
+
+
 def packet_callback(packet):
     info = extract_packet_info(packet)
     if info is not None:
@@ -126,3 +148,4 @@ view_packets(conn)
 frequent_packets(conn)
 target_ip = input("Enter IP to filter: ").strip()
 filter_by_ip(conn, target_ip)
+packets_summary(conn, target_ip)
