@@ -90,6 +90,14 @@ def frequent_packets(conn):
         print(row)
 
 
+def filter_by_ip(conn, ip):
+    cursor = conn.cursor()
+    cursor.execute("""SELECT * FROM packets WHERE src_ip = ? OR dst_ip = ?""", (ip, ip))
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
+
+
 def packet_callback(packet):
     info = extract_packet_info(packet)
     if info is not None:
@@ -116,3 +124,5 @@ print("\nStopped Capturing.")
 
 view_packets(conn)
 frequent_packets(conn)
+target_ip = input("Enter IP to filter: ").strip()
+filter_by_ip(conn, target_ip)
