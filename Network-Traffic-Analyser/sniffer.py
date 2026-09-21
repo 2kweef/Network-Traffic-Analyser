@@ -1,6 +1,7 @@
 from scapy.all import sniff, IP, TCP, UDP
 import sqlite3
 import datetime
+import pandas as pd
 
 
 def init_db(db_path="traffic.db"):
@@ -120,6 +121,11 @@ def packets_summary(conn, ip):
     print("Protocols:", [p[0] for p in protocols])
 
 
+def load_data(conn):
+    df = pd.read_sql("SELECT * FROM packets", conn)
+    return df
+
+
 def packet_callback(packet):
     info = extract_packet_info(packet)
     if info is not None:
@@ -136,7 +142,6 @@ def packet_callback(packet):
 
 conn = init_db()
 
-
 try:
     sniff(prn=packet_callback, store=False, timeout=30)
 except KeyboardInterrupt:
@@ -144,8 +149,10 @@ except KeyboardInterrupt:
 
 print("\nStopped Capturing.")
 
-view_packets(conn)
+# view_packets(conn)
 frequent_packets(conn)
 target_ip = input("Enter IP to filter: ").strip()
 filter_by_ip(conn, target_ip)
 packets_summary(conn, target_ip)
+df = load_data(conn)
+print(df.head())
